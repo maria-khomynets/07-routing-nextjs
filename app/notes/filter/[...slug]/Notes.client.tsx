@@ -16,11 +16,15 @@ import Loader from "@/components/Loader/Loader";
 import Pagination from "@/components/Pagination/Pagination";
 import { Toaster } from "react-hot-toast";
 import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
-import TagSelector from "@/components/TagSelector/TagSelector";
-export default function NotesClient() {
+
+type NotesClientProps = {
+  tag?: string;
+};
+
+export default function NotesClient({ tag }: NotesClientProps) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
-  const [tag, setTag] = useState("");
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -28,10 +32,7 @@ export default function NotesClient() {
     setSearch(search);
     setCurrentPage(1);
   }, 1000);
-  const handleTagChange = (value: string) => {
-    setTag(value);
-    setCurrentPage(1);
-  };
+
   const { data, isLoading, isError, isFetching } = useQuery({
     queryKey: [queryKey, search, tag, currentPage], //пагінація
     queryFn: () => fetchNotes({ search: search, tag, page: currentPage }),
@@ -43,7 +44,7 @@ export default function NotesClient() {
     <div className={css.app}>
       <header className={css.toolbar}>
         <SearchBox onChange={handleSearch} />
-        <TagSelector value={tag} onChange={handleTagChange} />
+
         {totalPages > 1 && (
           <Pagination
             totalPages={totalPages}
@@ -62,7 +63,7 @@ export default function NotesClient() {
       )}
       {data?.notes.length ? <NoteList notes={data.notes} /> : null}
       {isModalOpen && (
-        <Modal onClose={closeModal}>
+        <Modal>
           <NoteForm onCancel={closeModal} onSuccess={closeModal} />
         </Modal>
       )}
