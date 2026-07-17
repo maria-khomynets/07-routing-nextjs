@@ -39,6 +39,7 @@ export default function Modal({ children }: ModalProps) {
       onClick={handleBackdropClick}
     >
       <div className={css.modal}>
+    
         <button onClick={close}>Back</button>
         {children}
       </div>
