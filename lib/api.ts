@@ -63,12 +63,12 @@ export async function deleteNote(id: string): Promise<Note> {
 
   return response.data;
 }
-export async function getSingleNote(id: string) {
-  const responce = await axios.get<Note>(`/notes/${id}`, {
+export async function getSingleNote(id: string): Promise<Note> {
+  const response = await axios.get<Note>(`/notes/${id}`, {
     headers: {
       Authorization: notesToken,
       accept: "application/json",
     },
   });
-  return responce.data;
+  return response.data;
 }
